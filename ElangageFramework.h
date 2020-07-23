@@ -270,10 +270,10 @@ namespace dataobj{
 	};
 }
 
-class Dictory{
+template <typename T,typename T2> class Dictory{
 	private:
-		vector<string> key;
-		vector<string> value;
+		vector<T> key;
+		vector<T2> value;
 	public:
 		string id;
 
@@ -285,37 +285,37 @@ class Dictory{
 			return key.size();
 		}
 
-		vector<string>::iterator getIndex(string k){
-			vector<string>::iterator result = find(key.begin(), key.end(), k);
-			vector<string>::iterator r_nul;
+		int getIndex(T k){
+			typename vector<T>::iterator result = find(key.begin(), key.end(), k);
+			int n = distance(key.begin(),result);
 
-			return (result == key.end()) ? r_nul : result;
+			return n;
 		}
 
-		int push_back(string n_key,string n_value){
+		int push_back(T n_key,T2 n_value){
 			// 函数说明: 加入新的成员,返回词典的大小
 			key.push_back(n_key);
 			value.push_back(n_value);
 			return key.size();
 		}
 
-		string getValue(string k){
-			int pos = distance(key.begin() , getIndex(k));
+		T2 getValue(T k){
+			int pos = getIndex(k);
 			return value[pos];
 		}
 		
-		int setValue(string k,string n_v){
-			int pos = distance(key.begin() , getIndex(k));
+		int setValue(T k,T2 n_v){
+			int pos = getIndex(k);
 			value[pos] = n_v;
 			return getSize();
 		}
 
-		int deleteKey(string k){
-			vector<string>::iterator pos = getIndex(k);
-			vector<string>::iterator r_nul;
-			if(pos == r_nul)  return -1; // 未找到元素，删除失败
+		int deleteKey(T k){
+			typename vector<T>::iterator pos = find(key.begin(),key.end(),k);
+			int index = getIndex(k);
+			typename vector<T2>::iterator pos2 = find(value.begin(),value.end(),value[index]);
 			key.erase(pos);
-			value.erase(pos);
+			value.erase(pos2);
 			return getSize();            // 返回数组当前大小
 		}
 
@@ -328,7 +328,7 @@ class Dictory{
 class EConfig{
 	private:
 		vector<string> cuttedStr;
-		Dictory dic;
+		Dictory<string,string> dic;
 		string sep      = "\n";
 		string fileName = "";
 	public:

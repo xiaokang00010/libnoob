@@ -203,7 +203,7 @@ namespace dataobj{
 
     struct FrameworkApiVer{
         const string ApiName = "ElangageFramework";
-        const string ApiText = "[Elangage Framework] 0.1 rel.2\nTHIS IS A PREVIEW VERSION, NOT RELEASES!";
+        const string ApiText = "[Elangage Framework] 0.1 rel.3\nTHIS IS A PREVIEW VERSION, NOT RELEASES!";
         const int apiCode = 10;
         const bool IsSupportElangInclude = true;
         const etime ComplieTime = getTime(2020,7,1,20,30,20);

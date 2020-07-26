@@ -115,6 +115,35 @@ namespace Text{
 		}
 		return ret;
 	}
+    vector<string> comSplit(string str,const char splitCh){
+        string command = str;
+        //cout << command;
+        vector<string> ret;
+        string buf;
+        for(size_t i = 0;i < command.length();i++){
+            bool flag;
+    
+            if(command[i] == '"'){
+                flag = !flag;
+            }
+    
+            // 放入缓存
+            if(command[i] != splitCh || flag == true || i == command.length() - 1){
+                char n = command[i];
+                buf = buf + n;
+            }
+    
+            // 放入数组
+            if((command[i] == splitCh && flag != true)){
+                ret.push_back(buf);
+                buf = "";
+            }else if(i + 1 == command.length()){
+                ret.push_back(buf);
+                buf = "";
+            }
+        }
+        return ret;
+    }
 }
 
 namespace EasyFiles{
@@ -203,7 +232,7 @@ namespace dataobj{
 
     struct FrameworkApiVer{
         const string ApiName = "ElangageFramework";
-        const string ApiText = "[Elangage Framework] 0.1 rel.3\nTHIS IS A PREVIEW VERSION, NOT RELEASES!";
+        const string ApiText = "[Elangage Framework] 0.1 rel.2\nTHIS IS A PREVIEW VERSION, NOT RELEASES!";
         const int apiCode = 10;
         const bool IsSupportElangInclude = true;
         const etime ComplieTime = getTime(2020,7,1,20,30,20);
@@ -270,6 +299,30 @@ namespace dataobj{
 	};
 }
 
+namespace linux_os{
+	string getRealpath(string flinuxpath = "."){ 
+		// 也可以当作获得当前目录使用
+		// Sample: getRealpath()
+		// Return: <当前目录实际路径>
+    	char buf[256];
+    	string ret;
+    	if(realpath(flinuxpath.data(),buf)){
+        	ret = buf;
+	        return ret;
+    	}else{
+        	perror("LibraryError: Unknown Linux Path\n");
+        	return Text::ToString("");
+    	}
+	}
+
+	string getHostName(){
+		char hostname[1024];
+		gethostname(hostname,1024);
+		string ret = hostname;
+		return ret;
+	}
+}
+
 template <typename T,typename T2> class Dictory{
 	private:
 		vector<T> key;
@@ -279,6 +332,12 @@ template <typename T,typename T2> class Dictory{
 
 		Dictory(string id_ = "nul"){
 			id = id_;
+		}
+
+		bool isInDictory(T k){
+			typename vector<T>::iterator result = find(key.begin(), key.end(), k);
+			int n = distance(key.begin(),result);
+			return (result == key.end()) ? false : true;
 		}
 
 		int getSize(){
@@ -351,6 +410,11 @@ class EConfig{
 				sep = linesep;
 			}
 		}
+
+		int getConfigContentLength(){
+			return dic.getSize();
+		}
+
 		string readString(string key){
 			return dic.getValue(key);
 		}
